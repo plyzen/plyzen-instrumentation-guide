@@ -42,7 +42,7 @@ Explanation:
 * **activity**: The activity type is a deployment.
 * **event**: We are signaling that the deployment has finished.
 * **timestamp**: The time at which the deployment was finished.
-* **result**: The deplyment was successessful.
+* **result**: The deployment was successessful.
 
 If everything went well, the api returns with:
 
@@ -58,4 +58,15 @@ The Deployment Frequency for `hello-world-app` is 1 and the Change Fail Percenta
 
 ![image](https://github.com/user-attachments/assets/001b0d63-493e-4e36-b997-02f4368ff4bf)
 
-_To be continued..._
+## Start and Finish Events
+
+Each activity in plyzen should have a corresponding start and finish event. The finish event can be sent without a preceding start event, indicating completion with `"result": "success"` or `"result": "failure"`. However, if a start event is sent without a corresponding finish event, plyzen will assume after a certain period of time that the activity has not been completed and has failed.
+
+## Best Practice: Go Step-by-Step. Start with the Quick wins.
+
+The following graphic provides a visual roadmap for effective instrumentation.
+
+<img width="1643" alt="image" src="https://github.com/user-attachments/assets/87e4a4a6-9ae5-4659-a827-119e9eaf0fd9">
+
+Start with high-impact, low-effort steps – such as instrumenting production deployments – to quickly gain insight into your DORA metrics. As you progress, refine your setup by adding more events, such as build and monitoring events, to improve data accuracy and quality. Finally, expand your instrumentation to cover the entire value stream for comprehensive visibility and deeper insights into your software delivery process. This approach balances quick wins with long-term improvements.
+
