@@ -76,7 +76,54 @@ Deployment Frequency (DF) is a key DORA metric that reflects how often your team
 
 Key Considerations
 
-* End-to-End Focus: DORA metrics are end-to-end, so ***DF only counts deployments to production ("environment": "prod")***. While plyzen only considers production deployments for DF, you can still track deployments to other environments (e.g., dev, test, qa) using custom environment names.
-* Tracking Change Failures: By setting "result": "success" or "fail", plyzen also tracks the Change Failure Rate, another DORA metric.
-* Impact on Lead Time: DF data also helps measure Lead Time as the duration between two consecutive production deployments. This can later be refined for more precision.
-* Mean Time to Restore (MTTR): plyzen uses the data from successful and failed deployments to calculate MTTR, which measures the time it takes to restore service after a failed deployment. MTTR is determined by the time between a failed deployment ("result": "fail") and the next successful deployment ("result": "success").
+* **End-to-End Focus**: DORA metrics are end-to-end, so ***DF only counts deployments to production ("environment": "prod")***. While plyzen only considers production deployments for DF, you can still track deployments to other environments (e.g., dev, test, qa) using custom environment names.
+* **Tracking Change Failures**: By setting "result": "success" or "fail", plyzen also tracks the Change Failure Rate, another DORA metric.
+* **Impact on Lead Time**: DF data also helps measure Lead Time as the duration between two consecutive production deployments. This can later be refined for more precision.
+* **Mean Time to Restore (MTTR)**: plyzen uses the data from successful and failed deployments to calculate MTTR, which measures the time it takes to restore service after a failed deployment. MTTR is determined by the time between a failed deployment ("result": "fail") and the next successful deployment ("result": "success").
+
+## Measuring Lead Time (LT)
+
+Lead Time (LT) is a critical DORA metric that measures the time it takes from a code change to production deployment. It indicates the speed at which you can deliver features or fixes to your users.
+
+Key Considerations
+
+* **Basic LT Measurement**: With only production deployment instrumentation (see [Measuring Deployment Frequency (DF)](#measuring-deployment-frequency-df) above), you get a baseline measurement of LT.
+* **Enhanced Precision with Build Instrumentation**: By adding build instrumentation, plyzen can track when a version of an artifact was built, typically aligning closely with the time of the corresponding code change (triggered by a push to SCM under CI principles).
+* **Comprehensive Lead Time Calculation**: plyzen does not just measure the time from building a version to deploying that same version (which would only capture the pipeline's throughput time—an interesting metric in itself). Instead, plyzen also includes all builds leading up to the new release version. The calculation starts from the moment the last successfully deployed version was built and includes all subsequent builds. This approach ensures:
+  1. Inclusion of All Code Changes: LT considers all code changes leading to a successful release.
+  2. Accurate Start Time: If an artifact is not continuously developed, the LT starts from the moment development resumes on that version.
+
+### Basic Build Event Example
+
+To track a build, you send events with activity type `build`. Here's a basic example:
+
+**Start Event**
+```json
+{
+  "artifact": "hello-world-app",
+  "version": "1.0.0",
+  "environment": "ci",
+  "activity": "build",
+  "event": "start",
+  "timestamp": "2024-08-10T14:23:00Z"
+}
+```
+
+**Finish Event**
+```json
+{
+  "artifact": "hello-world-app",
+  "version": "1.0.0",
+  "environment": "ci",
+  "activity": "build",
+  "event": "finish",
+  "timestamp": "2024-08-10T14:25:00Z",
+  "result": "success"
+}
+```
+
+This setup allows plyzen to accurately calculate Lead Time by correlating the build information with deployment events.
+
+
+
+
