@@ -70,3 +70,13 @@ The following graphic provides a visual roadmap for effective instrumentation.
 
 Start with high-impact, low-effort steps – such as instrumenting production deployments – to quickly gain insight into your DORA metrics. As you progress, refine your setup by adding more events, such as build and monitoring events, to improve data accuracy and quality. Finally, expand your instrumentation to cover the entire value stream for comprehensive visibility and deeper insights into your software delivery process. This approach balances quick wins with long-term improvements.
 
+## Measuring Deployment Frequency (DF)
+
+Deployment Frequency (DF) is a key DORA metric that reflects how often your team deploys code to production. It’s important because it indicates the pace at which you’re delivering value to your end users.
+
+Key Considerations
+
+* End-to-End Focus: DORA metrics are end-to-end, so ***DF only counts deployments to production ("environment": "prod")***. While plyzen only considers production deployments for DF, you can still track deployments to other environments (e.g., dev, test, qa) using custom environment names.
+* Tracking Change Failures: By setting "result": "success" or "fail", plyzen also tracks the Change Failure Rate, another DORA metric.
+* Impact on Lead Time: DF data also helps measure Lead Time as the duration between two consecutive production deployments. This can later be refined for more precision.
+* Mean Time to Restore (MTTR): plyzen uses the data from successful and failed deployments to calculate MTTR, which measures the time it takes to restore service after a failed deployment. MTTR is determined by the time between a failed deployment ("result": "fail") and the next successful deployment ("result": "success").
