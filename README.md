@@ -62,6 +62,14 @@ The Deployment Frequency for `hello-world-app` is 1 and the Change Fail Percenta
 
 Each activity in plyzen should have a corresponding start and finish event. The finish event can be sent without a preceding start event, indicating completion with `"result": "success"` or `"result": "failure"`. However, if a start event is sent without a corresponding finish event, plyzen will assume after a certain period of time that the activity has not been completed and has failed.
 
+## Importance of Versioning
+
+Versioning of artifacts is crucial for correlating events in plyzen. In software development, versioning is a best practice to uniquely identify releases, builds, or changes. For plyzen, the method of versioning doesn't matter as long as events can be distinctly associated with a version.
+
+Though plyzen is tolerant (e.g., handling repeated events with the same version like Maven's SNAPSHOT concept), unclear versioning can affect metric precision. While plyzen doesn’t enforce a specific versioning scheme (e.g., Semver), it's essential that values are unique. plyzen determines the sequence of events by their timestamps, not by version order.
+
+Adopting a "build once, run anywhere" approach is recommended. plyzen can handle repeated builds and re-deployments of the same version, adhering to its principle of minimal invasiveness, without requiring specific adjustments to your processes and pipelines. However, clear and unique versioning is always advisable as a general best practice.
+
 ## Best Practice: Go Step-by-Step. Start with the Quick wins.
 
 The following graphic provides a visual roadmap for effective instrumentation.
