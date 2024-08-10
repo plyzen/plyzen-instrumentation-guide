@@ -87,7 +87,7 @@ Key Considerations
 * **End-to-End Focus**: DORA metrics are end-to-end, so ***DF only counts deployments to production ("environment": "prod")***. While plyzen only considers production deployments for DF, you can still track deployments to other environments (e.g., dev, test, qa) using custom environment names.
 * **Tracking Change Failures**: By setting "result": "success" or "fail", plyzen also tracks the Change Failure Rate, another DORA metric.
 * **Impact on Lead Time**: DF data also helps measure Lead Time as the duration between two consecutive production deployments. This can later be refined for more precision.
-* **Mean Time to Restore (MTTR)**: plyzen uses the data from successful and failed deployments to calculate MTTR, which measures the time it takes to restore service after a failed deployment. MTTR is determined by the time between a failed deployment ("result": "fail") and the next successful deployment ("result": "success").
+* **Mean Time to Recovery (MTTR)**: plyzen uses the data from successful and failed deployments to calculate MTTR, which measures the time it takes to restore service after a failed deployment. MTTR is determined by the time between a failed deployment ("result": "fail") and the next successful deployment ("result": "success").
 
 ## Measuring Lead Time (LT)
 
@@ -132,9 +132,9 @@ To track a build, you send events with activity type `build`. Here's a basic exa
 
 This setup allows plyzen to accurately calculate Lead Time by correlating the build information with deployment events.
 
-## Change Failure Percentage (CFP)
+## Change Fail Percentage (CFP)
 
-Change Failure Percentage (CFP) measures the rate at which changes fail during or after deployment. plyzen gives you the ability to send three types of signals to calculate CFP:
+Change Fail Percentage (CFP) measures the rate at which changes fail during or after deployment. plyzen gives you the ability to send three types of signals to calculate CFP:
 
 1. **Deployment Failure**: A deployment event with `"result": "failure"`.
 2. **Post-Deployment Test Failure**: Any activity of type `"test"` that fails after the same version of an artifact is deployed in the same environment.
@@ -153,9 +153,15 @@ Example CFP Scenarios
 
 These examples show how plyzen aggregates these signals to calculate CFP. Note that due to the end-to-end nature of the DORA metrics, only events in the "prod" environment count toward the metric.
 
-## Mean Time to Restore (MTTR)
+## Mean Time to Recovery (MTTR)
 
-*tbd*
+Mean Time to Recovery (MTTR) measures the time it takes to recover from a (change) failure and restore a stable service in production. plyzen calculates MTTR based on the signals used for CFP:
+
+* **Successful (Re)Deployment**: The time to recovery begins when a deployment fails or when a post-deployment test or alarm indicates an issue. It ends when a new (or the same) version is successfully deployed to production, the tests pass (if any), and the alarm is resolved (if any).
+* **Test Failure Recovery**: If the initial deployment was successful but the test failed, the time to recovery ends with a successful retest.
+* **Alarm Recovery**: If an alarm was signaled, time to recovery ends when the alarm is resolved ("activity": "alarm", "event": "finish").
+
+This approach ensures that MTTR reflects the true recovery time required to restore a stable service state in production.
 
 ## Aggregated Product Metrics
 
