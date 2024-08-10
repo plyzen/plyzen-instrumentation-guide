@@ -132,6 +132,27 @@ To track a build, you send events with activity type `build`. Here's a basic exa
 
 This setup allows plyzen to accurately calculate Lead Time by correlating the build information with deployment events.
 
+## Change Failure Percentage (CFP)
 
+*tbd*
 
+## Mean Time to Restore (MTTR)
 
+*tbd*
+
+## Aggregated Product Metrics
+
+In plyzen, you can also measure DORA metrics at the product level, beyond individual artifacts. This approach aggregates events from multiple artifacts to provide a comprehensive view of the entire product's performance.
+
+Key Considerations
+
+* **Product-Level View**: By defining a product as a collection of artifacts, plyzen allows you to assess DORA metrics at a higher level of abstraction.
+* **Event Aggregation**: plyzen aggregates events across all artifacts associated with the product, giving you insights into the overall speed and quality of the product delivery, rather than just its individual components.
+
+By utilizing aggregated product metrics, you can better understand the impact of your deployments and development activities on the final product delivered to your users.
+
+*to be continued ...*
+
+## Event Message Schema Reference: Basic and Advanced
+
+*tbd*
