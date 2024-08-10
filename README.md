@@ -134,19 +134,22 @@ This setup allows plyzen to accurately calculate Lead Time by correlating the bu
 
 ## Change Failure Percentage (CFP)
 
-Change Failure Percentage (CFP) measures the rate at which changes fail during or after deployment. plyzen uses three signals to calculate CFP:
+Change Failure Percentage (CFP) measures the rate at which changes fail during or after deployment. plyzen gives you the ability to send three types of signals to calculate CFP:
 
 1. **Deployment Failure**: A deployment event with `"result": "failure"`.
 2. **Post-Deployment Test Failure**: Any activity of type `"test"` that fails after the same version of an artifact is deployed in the same environment.
 3. **Alarm Activity**: An activity of type `"alarm"` associated with the same version of the deployed artifact.
+
+Any combination of these signals can be implemented. If at least one event signals a failure, it counts toward the CFP.
 
 Example CFP Scenarios
 
 | Artifact         | Version | Deployment Result | Smoke Test Result | Alarm occurred? | Ongoing CFP Calculation |
 |------------------|---------|-------------------|-------------------|-----------------|-------------------------|
 | hello-world-app  | v1      | success           | success           | no              | 0%                      |
-| hello-world-app  | v2      | success           | failure           | no              | 50%                     |
-| hello-world-app  | v3      | success           | success           | yes             | 66.7%                   |
+| hello-world-app  | v2      | failure           | not started       | no              | 50%                     |
+| hello-world-app  | v3      | success           | failure           | no              | 66.7%                   |
+| hello-world-app  | v4      | success           | success           | yes             | 75%                     |
 
 These examples show how plyzen aggregates these signals to calculate CFP. Note that due to the end-to-end nature of the DORA metrics, only events in the "prod" environment count toward the metric.
 
