@@ -171,10 +171,65 @@ Key Considerations
 
 * **Product-Level View**: By defining a product as a collection of artifacts, plyzen allows you to assess DORA metrics at a higher level of abstraction.
 * **Event Aggregation**: plyzen aggregates events across all artifacts associated with the product, giving you insights into the overall speed and quality of the product delivery, rather than just its individual components.
+  * **Lead Time**: The Lead Time of a product is calculated as the average of the Lead Times of the artifact versions that make up the product releases.
+  * **Deployment Frequency**: The Deployment Frequency is determined by the frequency of production deployment events associated with the product name, not by averaging the deployment frequencies of the individual artifacts.
+  * **Change Fail Percentage**: You can explicitly specify a result for the entire product deployment. If no result is specified, plyzen automatically determines the overall result based on the results of the included artifacts.
+    * Success: If all artifacts are deployed successfully.
+    * Failure: If the deployment result of all artifacts is failure.
+    * Diverse: If the result for some artifacts is success while for others is others failure.
+
+    It works similarly for Tests and Alarms (see CFP for artifacts for the concept), except that you specify the product name and a list of affected artifacts (analogous to the deployment example shown below).
+  * **Mean Time to Restore**: MTTR for products works similarly to artifacts. The difference is that the events include a product name and a list of affected artifacts. The MTTR is calculated based on the time from a failure until the product or all of its artifacts are restored to a stable state.
 
 By utilizing aggregated product metrics, you can better understand the impact of your deployments and development activities on the final product delivered to your users.
 
-*to be continued ...*
+### Product Metrics Example
+
+To illustrate how plyzen aggregates metrics at the product level, consider a product called "SuperApp", which consists of three artifacts: "auth-service", "user-interface", and "data-processor." Each artifact has its own versioning and deployment cycle. They can be deployed independently or combined as a deployment monolith or something in between.
+
+Here’s how you might structure a JSON event for the combined "SuperApp" deployment in the advanced format:
+
+```json
+{
+  "activities": [
+    {
+      "correlationId": "superapp-prod-deploy-1001",
+      "name": "prod-deploy",
+      "type": "deployment",
+      "events": [
+        {
+          "type": "finish",
+          "timestamp": "2024-08-10T15:00:00Z"
+        }
+      ],
+      "result": "success",
+      "product": {
+        "name": "SuperApp"
+      },
+      "artifacts": [
+        {
+          "name": "auth-service",
+          "version": "1.2.0",
+          "result": "success"
+        },
+        {
+          "name": "user-interface",
+          "version": "3.5.1",
+          "result": "success"
+        },
+        {
+          "name": "data-processor",
+          "version": "2.0.0",
+          "result": "success"
+        }
+      ],
+      "environment": {
+        "name": "prod"
+      }
+    }
+  ]
+}
+```
 
 ## Idempotence for Replayed Events
 
