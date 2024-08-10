@@ -167,6 +167,27 @@ By utilizing aggregated product metrics, you can better understand the impact of
 
 *to be continued ...*
 
+## Idempotence for Replayed Events
+
+Idempotence is crucial when replaying events to ensure that repeated events do not alter the state incorrectly. In plyzen, if an event is replayed—whether due to retries or intentional resubmission—the system processes it in a way that prevents duplicate effects. This means that if the semantically same event is received multiple times, plyzen will recognize it and skips repeated processing to avoid unintended effects and maintain data consistency.
+
+## Upsert/Merge and Amend Events
+
+plyzen supports the ability to upsert, merge, or amend events, which is vital for maintaining accurate tracking data. Using the `correlationId` property with a unique and reproducable value, multiple records can be associated with the same activity, allowing you to update or correct previously sent data. This is particularly useful when dealing with complex workflows where data might need to be sent in chunks or when revising earlier event data. By leveraging this feature, you can ensure that your event history remains precise and reflective of actual activities.
+
+### Use Case Examples
+
+#### Upsert an Aggregated Deployment Activity
+
+1. Start an "empty" aggregated product deployment.
+2. Later add the artifacts and versions deployed.
+
+> **Note** It is not necessary to repeat already sent data. All you need to repeatingly provide is the `correlationId`.
+
+#### Amend Previously Ingested Data
+
+E.g. if you imported data manually and made a mistake with the timestamp, you can repeat the submission with correct timestamps.
+
 ## Event Message Schema Reference: Basic and Advanced
 
 *tbd*
