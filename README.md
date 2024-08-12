@@ -385,4 +385,4 @@ For a fully documented reference of the basic message format, see [`advanced-ing
 
 ## Instrumentation Utilities
 
-To further streamline your plyzen instrumentation, several utilities are available in the [plyzen GitHub repositories] (https://github.com/plyzen). These tools provide scripts, helpers, and further information to automate the creation and sending of events in various formats, including Bash and Groovy implementations for use in Gitlab and Jenkins. By using these utilities, you can quickly set up and manage your instrumentation to ensure consistent and accurate data collection throughout your software delivery pipeline.
+To further streamline your plyzen instrumentation, several utilities are available in the [plyzen GitHub repositories](https://github.com/plyzen). These tools provide scripts, helpers, and further information to automate the creation and sending of events in various formats, including Bash and Groovy implementations for use in Gitlab and Jenkins. By using these utilities, you can quickly set up and manage your instrumentation to ensure consistent and accurate data collection throughout your software delivery pipeline.
