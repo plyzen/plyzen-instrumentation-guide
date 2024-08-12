@@ -1,0 +1,172 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$id": "https://plyzen.io/advanced-ingest-schema.json",
+  "description": "Advanced schema for ingesting events into plyzen",
+  "type": "object",
+  "properties": {
+    "activities": {
+      "description": "An ingest object can carry 0..n activities",
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "correlationId": {
+              "description": "Identifier for associating multiple records as the same activity (e.g. associate start to end events of the same activity, send data in chunks, or upsert/merge previously sent activity data)",
+              "type": "string"
+            },
+            "name": {
+              "description": "Name of the activity",
+              "type": "string"
+            },
+            "type": {
+              "description": "Type of the activity: build, test, or deployment",
+              "type": "string",
+              "enum": ["build", "test", "deployment", "alarm"]
+            },
+            "events": {
+              "description": "Events occured in this activity",
+              "type": "array",
+              "items": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "description": "Type of the event: start, finish",
+                      "type": "string",
+                      "enum": ["start", "finish"]
+                    },
+                    "timestamp": {
+                      "description": "(optional) Time stamp of the event, defaults to current timestamp",
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                }
+              ]
+            },
+            "result": {
+              "description": "(optional) Result of the activity: success, failure, diverse; a finish event without explicit result is assumed based on the combined results of the artifacts",
+              "type": "string",
+              "enum": ["success", "failure", "diverse"]
+            },
+            "product": {
+              "description": "(optional) Name of the product, if the activity belongs to a compound action (e.g. deploying multiple artifact together as one product release)",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name"
+              ]
+            },
+            "artifacts": {
+              "description": "The artifacts treated with this activity",
+              "type": "array",
+              "items": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "namespace": {
+                      "description": "(optional) The artifact's namespace (e.g. to make generally named artifacts like core-lib distinguishable); defaults to 'default'",
+                      "type": "string"
+                    },
+                    "name": {
+                      "description": "The artifact's unique name within the namespace",
+                      "type": "string"
+                    },
+                    "version": {
+                      "description": "The artifact's version",
+                      "type": "string"
+                    },
+                    "result": {
+                      "description": "(optional) The artifact's individual result within the activity",
+                      "type": "string",
+                      "enum": ["success", "failure"]
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "version"
+                  ]
+                }
+              ]
+            },
+            "environment": {
+              "description": "The environment in which the activity takes place",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "The environment's name (e.g. prod)",
+                  "type": "string"
+                },
+                "instance": {
+                  "description": "(optional) For some environments multiple instances exist (e.g. a certain kubernetes namspace)",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "description": "Name of the instance",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name"
+                  ]
+                }
+              },
+              "required": [
+                "name"
+              ]
+            }
+          },
+          "required": [
+            "correlationId"
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "activities"
+  ],
+  "examples" : [
+    {
+      "activities": [
+        {
+          "correlationId": "prod-deploy-1337",
+          "name": "prod-deploy",
+          "type": "deployment",
+          "events": [
+            {
+              "type": "finish",
+              "timestamp": "2021-05-01T13:37:13.370Z"
+            }
+          ],
+          "result": "success",
+          "product": {
+            "name": "big-thing-after-next"
+          },
+          "artifacts": [
+            {
+              "namespace": "big-things",
+              "name": "core-lib",
+              "version": "2.4.3",
+              "result": "success"
+            }
+          ],
+          "environment": {
+            "name": "prod",
+            "instance": {
+              "name": "green"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

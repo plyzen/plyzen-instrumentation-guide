@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$id": "https://plyzen.io/basic-ingest-schema.json",
+  "description": "Basic schema for ingesting events into plyzen",
+  "type": "object",
+  "properties": {
+    "correlationId": {
+      "description": "(optional) Identifier for associating multiple records as the same activity (e.g. associate start to end events of the same activity, send data in chunks, or upsert/merge previously sent activity data). Will be generated, if not provided",
+      "type": "string"
+    },
+    "namespace": {
+      "description": "(optional) The artifact's namespace (e.g. to make generally named artifacts like core-lib distinguishable); defaults to 'default'",
+      "type": "string"
+    },
+    "artifact": {
+      "description": "The artifact's unique name within the namespace",
+      "type": "string"
+    },
+    "version": {
+      "description": "The artifact's version",
+      "type": "string"
+    },
+    "environment": {
+      "description": "The environment's name (e.g. prod) in which the activity takes place",
+      "type": "string"
+    },
+    "instance": {
+      "description": "(optional) Name of the environment instance. For some environments multiple instances exist (e.g. a certain kubernetes namspace)",
+      "type": "string"
+    },
+    "activity": {
+      "description": "(optional, if properties activityName and activityType exist) Name of the activity that must imply the activity type by containing on of the substrings 'build', 'deploy', 'test', 'alarm'",
+      "type": "string"
+    },
+    "activityName": {
+      "description": "(optional, if activity property exists) Name of the activity",
+      "type": "string"
+    },
+    "activityType": {
+      "description": "(optional, if activity property exists) Type of the activity: build, deployment, test",
+      "enum": ["build", "deployment", "test", "alarm"]
+    },
+    "event": {
+      "description": "Type of the event: start, finish",
+      "type": "string",
+      "enum": ["start", "finish"]
+    },
+    "timestamp": {
+      "description": "(optional) Time stamp of the event, defaults to current timestamp",
+      "type": "string",
+      "format": "date-time"
+    },
+    "result": {
+      "description": "(optional) Result of the activity: success, failure. Defaults to 'success' for events of type 'finish'.",
+      "type": "string",
+      "enum": ["success", "failure"]
+    },
+    "product": {
+      "description": "(optional) Name of the product, if the activity belongs to a compound action (e.g. deploying multiple artifact together as one product release). This usually only makes sense in combination with the correlationId property.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "artifact",
+    "version",
+    "environment",
+    "event"
+  ],
+  "examples" : [
+    {
+      "namespace": "big-things",
+      "artifact": "core-lib",
+      "version": "2.4.3",
+      "environment": "prod",
+      "instance": "green",
+      "activity": "prod-deploy",
+      "event": "finish",
+      "timestamp": "2021-05-01T13:37:13.370Z",
+      "result": "success"
+    }
+  ]
+}
