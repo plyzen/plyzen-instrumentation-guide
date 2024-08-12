@@ -254,4 +254,131 @@ E.g. if you imported data manually and made a mistake with the timestamp, you ca
 
 ## Event Message Schema Reference: Basic and Advanced
 
-*tbd*
+plyzen supports two schemas for ingesting events:
+
+1. the **Basic Ingest Schema** and
+2. the **Advanced Ingest Schema**.
+
+These schemas define the structure of the JSON payloads that are sent to the plyzen API to capture various activities within your delivery pipeline.
+
+### Basic Ingest Schema
+
+The Basic Ingest Schema is designed for simple use cases and is perfect for most scenarios. It contains the essential fields in a flat JSON object to keep it simple and stupid (KISS). We recommend using it unless you have more sophisticated requirements.
+
+**Example:**
+```json
+{
+  "artifact": "example-artifact",
+  "version": "1.0.0",
+  "activityType": "deployment",
+  "environment": "prod",
+  "event": "finish"
+}
+```
+This example shows a basic schema message with the minimum required fields. It signals the end of an artifact deployment to production.
+
+For a fully documented reference of the basic message format, see [`basic-ingest-schema.json`](basic-ingest-schema.json).
+
+### Advanced Ingest Schema
+
+The Advanced Ingest Schema provides greater flexibility and detail to support complex scenarios, such as batch submission of activities. It allows events to be aggregated across different artifacts and is better suited for upserting, merging, and modifying event data.
+
+**Example 1: Minimal Advanced Message**
+
+```json
+{
+  "activities": [
+    {
+      "correlationId": "deploy-1001",
+      "type": "deployment",
+      "events": [
+        {
+          "type": "finish"
+        }
+      ],
+      "artifacts": [
+        {
+          "name": "example-artifact",
+          "version": "1.0.0",
+          "environment": {
+            "name": "prod"
+          }
+        }
+      ]
+    }
+  ]
+}
+```
+This message is semantically identical to the basic schema example provided earlier, using the advanced format.
+
+**Example 2: Extended Advanced Message**
+
+```json
+{
+  "activities": [
+    {
+      "correlationId": "deploy-1001",
+      "type": "deployment",
+      "events": [
+        {
+          "type": "finish"
+        }
+      ],
+      "artifacts": [
+        {
+          "name": "example-artifact",
+          "version": "1.0.0",
+          "environment": {
+            "name": "prod"
+          }
+        }
+      ]
+    },
+    {
+      "correlationId": "superapp-prod-deploy-2001",
+      "type": "deployment",
+      "events": [
+        {
+          "type": "start",
+          "timestamp": "2024-08-10T16:55:00Z"
+        },
+        {
+          "type": "finish",
+          "timestamp": "2024-08-10T17:00:00Z"
+        }
+      ],
+      "result": "success",
+      "product": {
+        "name": "SuperApp"
+      },
+      "artifacts": [
+        {
+          "namespace": "core-services",
+          "name": "auth-service",
+          "version": "1.2.0",
+          "result": "success"
+        },
+        {
+          "namespace": "frontend",
+          "name": "user-interface",
+          "version": "3.5.1",
+          "result": "success"
+        },
+        {
+          "namespace": "backend",
+          "name": "data-processor",
+          "version": "2.0.0",
+          "result": "success"
+        }
+      ],
+      "environment": {
+        "name": "prod"
+      }
+    }
+  ]
+}
+
+```
+This example demonstrates a batch of two activities: one identical to the minimal message above and another representing a product aggregation with three artifacts.
+
+For a fully documented reference of the basic message format, see [`advanced-ingest-schema.json`](advanced-ingest-schema.json).
