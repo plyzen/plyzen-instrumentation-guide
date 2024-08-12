@@ -382,3 +382,7 @@ This message is semantically identical to the basic schema example provided earl
 This example demonstrates a batch of two activities: one identical to the minimal message above and another representing a product aggregation with three artifacts.
 
 For a fully documented reference of the basic message format, see [`advanced-ingest-schema.json`](advanced-ingest-schema.json).
+
+## Instrumentation Utilities
+
+To further streamline your plyzen instrumentation, several utilities are available in the [plyzen GitHub repositories] (https://github.com/plyzen). These tools provide scripts, helpers, and further information to automate the creation and sending of events in various formats, including Bash and Groovy implementations for use in Gitlab and Jenkins. By using these utilities, you can quickly set up and manage your instrumentation to ensure consistent and accurate data collection throughout your software delivery pipeline.
