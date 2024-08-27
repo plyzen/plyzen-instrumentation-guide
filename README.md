@@ -8,7 +8,7 @@ The data is the foundation for deriving the key [DORA metrics](https://dora.dev/
 
 ### tl;dr
 
-To instrument your software delivery pipeline with plyzen, `POST` event messages in JSON format to the API endpoint. Use activity types such as `build`, `test`, `deployment`, and `alarm` to capture different stages of the process that contribute to the metrics. Two message schemas are available – [basic](basic-ingest-schema.json) and [advanced](advanced-ingest-schema.json) – to accommodate different use cases.
+To instrument your software delivery pipeline with plyzen, `POST` event messages in JSON format to the API endpoint. Use activity types such as `build`, `deployment`, `test`, and `alarm` to capture different stages of the process that contribute to the metrics. Two message schemas are available – [basic](basic-ingest-schema.json) and [advanced](advanced-ingest-schema.json) – to accommodate different use cases.
 
 ## What is Instrumentation?
 
