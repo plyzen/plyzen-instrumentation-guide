@@ -6,6 +6,10 @@ This document provides a comprehensive guide to collecting events from your soft
 
 The data is the foundation for deriving the key [DORA metrics](https://dora.dev/guides/dora-metrics-four-keys/) to analyze and optimize your software delivery performance for speed, quality, and efficiency.
 
+### tl;dr
+
+To instrument your software delivery pipeline with plyzen, `POST` event messages in JSON format to the API endpoint. Use activity types such as `build`, `test`, `deployment`, and `alarm` to capture different stages of the process that contribute to the metrics. Two message schemas are available – [basic](basic-ingest-schema.json) and [advanced](advanced-ingest-schema.json) – to accommodate different use cases.
+
 ## What is Instrumentation?
 
 Instrumentation involves placing webhooks at specific points within your delivery pipeline to capture events. These events are then sent to the plyzen web API, where they are processed. The results are immediately presented to you in the web dashboard.
@@ -238,6 +242,8 @@ Idempotence is crucial when replaying events to ensure that repeated events do n
 ## Upsert/Merge and Amend Events
 
 plyzen supports the ability to upsert, merge, or amend events, which is vital for maintaining accurate tracking data. Using the `correlationId` property with a unique and reproducable value, multiple records can be associated with the same activity, allowing you to update or correct previously sent data. This is particularly useful when dealing with complex workflows where data might need to be sent in chunks or when revising earlier event data. By leveraging this feature, you can ensure that your event history remains precise and reflective of actual activities.
+
+Always use the POST HTTP method.
 
 ### Use Case Examples
 
