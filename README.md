@@ -142,8 +142,42 @@ This setup allows plyzen to accurately calculate Lead Time by correlating the bu
 Change Fail Percentage (CFP) measures the rate at which changes fail during or after deployment. plyzen gives you the ability to send three types of signals to calculate CFP:
 
 1. **Deployment Failure**: A deployment event with `"result": "failure"`.
-2. **Post-Deployment Test Failure**: Any activity of type `"test"` that fails after the same version of an artifact is deployed in the same environment.
-3. **Alarm Activity**: An activity of type `"alarm"` associated with the same version of the deployed artifact.
+```json
+{
+    "artifact": "hello-world-app",
+    "version": "1.0.0",
+    "environment": "prod",
+    "activityName": "Deploy to Prod",
+    "activityType": "deployment",
+    "event": "finish",
+    "result": "failure"
+}
+```
+
+3. **Post-Deployment Test Failure**: Any activity of type `"test"` that fails (`"result": "failure"`) after the same version of an artifact is deployed in the same environment.
+```json
+{
+    "artifact": "hello-world-app",
+    "version": "1.0.0",
+    "environment": "prod",
+    "activityName": "Smoke Test",
+    "activityType": "test",
+    "event": "finish",
+    "result": "failure"
+}
+```
+
+4. **Alarm Activity**: An activity of type `"alarm"` associated with the same version of the deployed artifact.
+```json
+{
+    "artifact": "hello-world-app",
+    "version": "1.0.0",
+    "environment": "prod",
+    "activityName": "Availability Monitoring",
+    "activityType": "alarm",
+    "event": "start"
+}
+```
 
 Any combination of these signals can be implemented. If at least one event signals a failure, it counts toward the CFP.
 
@@ -163,8 +197,40 @@ These examples show how plyzen aggregates these signals to calculate CFP. Note t
 Mean Time to Recovery (MTTR) measures the time it takes to recover from a (change) failure and restore a stable service in production. plyzen calculates MTTR based on the signals used for CFP:
 
 * **Successful (Re)Deployment**: The time to recovery begins when a deployment fails or when a post-deployment test or alarm indicates an issue. It ends when a new (or the same) version is successfully deployed to production, the tests pass (if any), and the alarm is resolved (if any).
+```json
+{
+    "artifact": "hello-world-app",
+    "version": "1.0.1"
+    "environment": "prod",
+    "activityName": "Deploy to Prod",
+    "activityType": "deployment",
+    "event": "finish",
+    "result": "success"
+}
+```
 * **Test Failure Recovery**: If the initial deployment was successful but the test failed, the time to recovery ends with a successful retest.
+```json
+{
+    "artifact": "hello-world-app",
+    "version": "1.0.1"
+    "environment": "prod",
+    "activityName": "Smoke Test",
+    "activityType": "test",
+    "event": "finish",
+    "result": "success"
+}
+```
 * **Alarm Recovery**: If an alarm was signaled, time to recovery ends when the alarm is resolved ("activity": "alarm", "event": "finish").
+```json
+{
+    "artifact": "hello-world-app",
+    "version": "1.0.0",
+    "environment": "prod",
+    "activityName": "Availability Monitoring",
+    "activityType": "alarm",
+    "event": "finish",
+}
+```
 
 This approach ensures that MTTR reflects the true recovery time required to restore a stable service state in production.
 
