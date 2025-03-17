@@ -73,6 +73,10 @@ Versioning of artifacts is crucial for correlating events in plyzen. In software
 
 Though plyzen is tolerant (e.g., handling repeated events with the same version like Maven's SNAPSHOT concept), unclear versioning can affect metric precision. While plyzen doesn’t enforce a specific versioning scheme (e.g., Semver), it's essential that values are unique. plyzen determines the sequence of events by their timestamps, not by version order.
 
+If your development process assigns distinct version numbers only later in the lifecycle, it is recommended to use the SCM revision number (e.g., Git commit hash) as the version identifier to ensure event correlation.
+
+In some cases, the process step or tool that generates the event may not have access to a version number (e.g. a monitoring system that signals an alert). In such a case, the event can be sent without the version attribute, and plyzen will automatically associate the event with the last known version that was successfully deployed in that environment.
+
 Adopting a "build once, run anywhere" approach is recommended. plyzen can handle repeated builds and re-deployments of the same version, adhering to its principle of minimal invasiveness, without requiring specific adjustments to your processes and pipelines. However, clear and unique versioning is always advisable as a general best practice.
 
 ## Best Practice: Go Step-by-Step. Start with the Quick wins.
@@ -231,6 +235,7 @@ Mean Time to Recovery (MTTR) measures the time it takes to recover from a (chang
     "event": "finish",
 }
 ```
+> **Note**: The monitoring system that signals an `alert` may not know the version number. If this is the case, the event can be sent without the version attribute. plyzen will automatically associate the event with the last known version that was successfully deployed in that environment.
 
 This approach ensures that MTTR reflects the true recovery time required to restore a stable service state in production.
 
