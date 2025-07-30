@@ -109,6 +109,8 @@ Key Considerations
 * **Comprehensive Lead Time Calculation**: plyzen does not just measure the time from building a version to deploying that same version (which would only capture the pipeline's throughput time—an interesting metric in itself). Instead, plyzen also includes all builds leading up to the new release version. The calculation starts from the moment the last successfully deployed version was built and includes all subsequent builds. This approach ensures:
   1. Inclusion of All Code Changes: LT considers all code changes leading to a successful release.
   2. Accurate Start Time: If an artifact is not continuously developed, the LT starts from the moment development resumes on that version.
+ 
+<img width="4840" height="2724" alt="image" src="https://github.com/user-attachments/assets/7bfd4557-6519-4020-b97d-2dd701468459" />
 
 ### Basic Build Event Example
 
