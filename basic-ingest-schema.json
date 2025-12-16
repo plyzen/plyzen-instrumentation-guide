@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$schema": "https://json-schema.org/draft/2020-12/schema#",
   "$id": "https://plyzen.io/basic-ingest-schema.json",
   "description": "Basic schema for ingesting events into plyzen",
   "type": "object",
@@ -58,6 +58,9 @@
     "product": {
       "description": "(optional) Name of the product, if the activity belongs to a compound action (e.g. deploying multiple artifact together as one product release). This usually only makes sense in combination with the correlationId property.",
       "type": "string"
+    },
+    "extensions": {
+      "$ref": "extensions-ingest-schema.json#"
     }
   },
   "required": [
@@ -75,7 +78,7 @@
       "instance": "green",
       "activity": "prod-deploy",
       "event": "finish",
-      "timestamp": "2021-05-01T13:37:13.370Z",
+      "timestamp": "2025-12-16T13:37:13.370Z",
       "result": "success"
     }
   ]

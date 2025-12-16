@@ -461,7 +461,37 @@ This message is semantically identical to the basic schema example provided earl
 ```
 This example demonstrates a batch of two activities: one identical to the minimal message above and another representing a product aggregation with three artifacts.
 
-For a fully documented reference of the basic message format, see [`advanced-ingest-schema.json`](advanced-ingest-schema.json).
+For a fully documented reference of the advanced message format, see [`advanced-ingest-schema.json`](advanced-ingest-schema.json).
+
+### Event Message Extensions
+
+To enrich your instrumentation and provide additional context for analytics, traceability, and reporting, plyzen supports optional data extensions in both the basic and advanced event message formats.
+
+Extensions are included via the top-level `extensions` attribute in a basic message, or within each `activities` object in the advanced format.
+
+Currently, the schema supports referencing associated change requests (e.g., JIRA tickets), enabling traceability between deployments and the change management process.
+
+**Example (Basic Message Format)**
+
+```json
+{
+  "artifact": "hello-world-app",
+  "version": "2.3.1",
+  "environment": "prod",
+  "activityType": "deployment",
+  "event": "start",
+  "timestamp": "2025-12-16T11:27:00.000Z",
+  "extensions": {
+    "changeRequest": {
+      "id": "PROJ-1337",
+      "type": "jira"
+    }
+  }
+}
+```
+This allows plyzen to associate the deployment with the corresponding change request. If configured accordingly, plyzen can generate deep links to the change request ticket in the change management system.
+
+You can find the schema definition for extensions here: [`extensions-ingest-schema.json`](extensions-ingest-schema.json).
 
 ## Instrumentation Utilities
 

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema#",
+  "$id": "https://plyzen.io/extensions-ingest-schema.json",
+  "description": "Schema for optional activity extension data within a plyzen ingest event message.",
+  "type": "object",
+  "properties": {
+    "changeRequest": {
+      "description": "(optional) References a change request associated with the activity, typically a deployment.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "Change request ID, e.g. ticket number.",
+          "type": "string"
+        },
+        "type": {
+          "description": "(optional) Identifies the system managing the change request, e.g. 'jira'. Used to derive a link to the change request if configured in plyzen.",
+          "type": "string"
+        }
+      },
+      "required": ["id"]
+    }
+  },
+  "examples" : [
+    {
+      "changeRequest": {
+        "id": "PROJ-1337",
+        "type": "jira"
+      }
+    }
+  ]
+}
